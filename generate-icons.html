@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Icons</title>
+</head>
+<body>
+    <canvas id="canvas" width="512" height="512"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 背景を青色に
+        ctx.fillStyle = '#3b82f6';
+        ctx.fillRect(0, 0, 512, 512);
+        
+        // 「燃」の文字
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 240px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('燃', 256, 280);
+        
+        // 「燃費」の文字
+        ctx.font = '80px Arial';
+        ctx.fillText('燃費', 256, 420);
+        
+        // 各サイズで保存
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        sizes.forEach(size => {
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = size;
+            tempCanvas.height = size;
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.drawImage(canvas, 0, 0, size, size);
+            
+            const link = document.createElement('a');
+            link.download = `icon-${size}x${size}.png`;
+            link.href = tempCanvas.toDataURL();
+            link.click();
+        });
+    </script>
+</body>
+</html>

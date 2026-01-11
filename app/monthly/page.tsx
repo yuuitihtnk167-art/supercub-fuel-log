@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { ArrowLeft, Calculator, AlertCircle } from "lucide-react"
+import { ArrowLeft, Calculator, AlertCircle, Fuel, Calendar } from "lucide-react"
 import Link from "next/link"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
@@ -115,8 +115,27 @@ export default function MonthlyPage() {
 
         <header className="mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-2">月次燃費レポート</h1>
-          <p className="text-muted-foreground">月ごとの平均燃費を確認</p>
+          <p className="text-muted-foreground">選択した月の燃費を確認できます。</p>
         </header>
+
+        <div className="flex gap-3 mb-8 flex-wrap">
+          <Link href="/">
+            <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+              <Fuel className="h-4 w-4" />
+              記録
+            </Button>
+          </Link>
+          <Link href="/history">
+            <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+              <Fuel className="h-4 w-4" />
+              履歴・インポート
+            </Button>
+          </Link>
+          <Button className="flex items-center gap-2 bg-primary">
+            <Calendar className="h-4 w-4" />
+            月次レポート
+          </Button>
+        </div>
 
         <Card className="p-6 mb-8 bg-card border-border">
           <div className="space-y-4">
@@ -143,9 +162,9 @@ export default function MonthlyPage() {
                   <p className="text-5xl font-bold text-primary">{averageFuelEfficiency.toFixed(2)}</p>
                   <p className="text-xl text-foreground mt-1">km/L</p>
                   <div className="mt-4 text-sm text-muted-foreground space-y-1">
-                    <p>走行距離: {totalMileage.toFixed(2)} km</p>
+                    <p>総走行距離: {totalMileage.toFixed(2)} km</p>
                     <p>総給油量: {totalFuel.toFixed(2)} L</p>
-                    <p>{monthlyRecords.length} 件の給油記録</p>
+                    <p>{monthlyRecords.length} 件</p>
                   </div>
 
                   <div className="mt-4">
@@ -156,7 +175,7 @@ export default function MonthlyPage() {
                       className="flex items-center gap-2"
                     >
                       <Calculator className="h-4 w-4" />
-                      {showMonthlyFormula ? "計算式を非表示" : "計算式を表示"}
+                      {showMonthlyFormula ? "計算式を隠す" : "計算式を表示"}
                     </Button>
                   </div>
 
@@ -164,7 +183,7 @@ export default function MonthlyPage() {
                     <div className="mt-4 p-4 bg-background/80 rounded-lg text-left text-sm">
                       <div className="font-semibold text-foreground mb-2 flex items-center gap-2">
                         <Calculator className="h-4 w-4" />
-                        月次平均燃費の計算式
+                        月次燃費の計算式
                       </div>
                       <div className="space-y-2 text-muted-foreground">
                         {(() => {
@@ -192,31 +211,35 @@ export default function MonthlyPage() {
                             <>
                               {previousMonthLastDate && (
                                 <p>
-                                  前月末の走行距離: {previousMonthLastMileage.toFixed(2)} km ({previousMonthLastDate})
+                                  前月最終走行距離: {previousMonthLastMileage.toFixed(2)} km ({previousMonthLastDate})
                                 </p>
                               )}
                               {isFirstRecordEver && (
                                 <p className="text-xs text-amber-600">
-                                  ※ {firstRecordInMonth.date} が全データの最初の記録です
+                                  データ内の最初の記録です。最初の走行距離の給油は除外しています。
                                 </p>
                               )}
                               <p>
-                                月初の走行距離: {firstRecordInMonth.mileage!.toFixed(2)} km ({firstRecordInMonth.date})
+                                当月最初の走行距離: {firstRecordInMonth.mileage!.toFixed(2)} km (
+                                {firstRecordInMonth.date})
                               </p>
                               <p>
-                                月末の走行距離: {lastRecordInMonth.mileage!.toFixed(2)} km ({lastRecordInMonth.date})
+                                当月最終の走行距離: {lastRecordInMonth.mileage!.toFixed(2)} km (
+                                {lastRecordInMonth.date})
                               </p>
                               <p className="font-semibold text-foreground">
                                 走行距離の増加: {totalMileage.toFixed(2)} km
                               </p>
                               <div className="my-2 border-t border-border pt-2">
                                 <p className="text-xs mb-1">
-                                  {isFirstRecordEver ? "月内の給油（最初の給油を除く）:" : "月内の給油:"}
+                                  {isFirstRecordEver
+                                    ? "当月の給油（最初の走行距離の給油を除外）:"
+                                    : "当月の給油:"}
                                 </p>
                                 {fuelRecords.map((record, i) => (
                                   <p key={i} className="text-xs ml-4">
                                     {record.date}: {record.fuel.toFixed(2)} L
-                                    {record.mileage === null && " (走行距離未記録)"}
+                                    {record.mileage === null && " (走行距離なし)"}
                                     {record.isEstimated && (
                                       <span className="ml-2 text-amber-600 font-semibold">推定</span>
                                     )}
@@ -234,13 +257,13 @@ export default function MonthlyPage() {
                               </div>
                               <p className="text-xs mt-2 text-muted-foreground">
                                 {isFirstRecordEver
-                                  ? "※全データの最初の給油は前月がないため除外しています"
-                                  : "※月内のすべての給油を含めて計算しています"}
+                                  ? "データの最初の記録が当月の場合、最初の給油は除外しています。"
+                                  : "走行距離の間にある給油を合算しています。"}
                               </p>
                               {hasEstimated && (
                                 <p className="text-xs mt-2 text-amber-600 flex items-start gap-1">
                                   <AlertCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
-                                  一部の給油量は前後の燃費記録から推定されています
+                                  推定値は前後の給油記録から算出しています。
                                 </p>
                               )}
                             </>
@@ -255,7 +278,7 @@ export default function MonthlyPage() {
               <div className="mt-6 p-6 bg-muted/50 rounded-lg text-center">
                 <p className="text-muted-foreground">
                   {selectedMonth
-                    ? "選択された月には十分な燃費データがありません。（最低2つの走行距離記録が必要）"
+                    ? "選択した月は走行距離の記録が不足しています。少なくとも2件の走行距離を登録してください。"
                     : "月を選択してください。"}
                 </p>
               </div>
@@ -265,9 +288,9 @@ export default function MonthlyPage() {
 
         {monthlyRecords.length > 0 && (
           <Card className="p-6 bg-card border-border">
-            <h2 className="text-2xl font-semibold mb-4 text-foreground">{selectedMonth} の給油記録</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">{selectedMonth} の記録</h2>
             <div className="space-y-3">
-              {monthlyRecords.map((record) => (
+              {[...monthlyRecords].reverse().map((record) => (
                 <div
                   key={record.id}
                   className="flex justify-between items-center p-4 bg-secondary/30 rounded-lg border border-border"
@@ -275,7 +298,7 @@ export default function MonthlyPage() {
                   <div className="flex-1">
                     <div className="font-medium text-foreground">{record.date}</div>
                     <div className="text-sm text-muted-foreground">
-                      走行距離: {record.mileage !== null ? `${record.mileage.toFixed(2)} km` : "未記録"} | 燃料:{" "}
+                      走行距離: {record.mileage !== null ? `${record.mileage.toFixed(2)} km` : "未記録"} | 給油量:{" "}
                       {record.fuel.toFixed(2)} L
                       {record.isEstimated && (
                         <span className="ml-2 text-xs text-amber-600 font-semibold inline-flex items-center gap-1">

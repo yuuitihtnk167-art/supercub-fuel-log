@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -11,6 +12,8 @@ export const metadata: Metadata = {
   title: "スーパーカブ燃費記録アプリ",
   description: "スーパーカブの燃費を記録・管理するアプリケーション",
   generator: "v0.app",
+  manifest: "/manifest.json",
+  themeColor: "#3b82f6",
   icons: {
     icon: [
       {
@@ -24,6 +27,16 @@ export const metadata: Metadata = {
       {
         url: "/icon.svg",
         type: "image/svg+xml",
+      },
+      {
+        url: "/icons/icon-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        url: "/icons/icon-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
       },
     ],
     apple: "/apple-icon.png",
@@ -39,6 +52,7 @@ export default function RootLayout({
     <html lang="ja">
       <body className={`font-sans antialiased`}>
         {children}
+        <ServiceWorkerRegister />
         <Analytics />
       </body>
     </html>
