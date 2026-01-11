@@ -32,6 +32,7 @@ export default function HomePage() {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [isIos, setIsIos] = useState(false)
   const [isStandalone, setIsStandalone] = useState(false)
+  const appBuildAt = process.env.NEXT_PUBLIC_APP_BUILD_AT ?? ""
 
   useEffect(() => {
     const stored = localStorage.getItem("fuelRecords")
@@ -222,15 +223,6 @@ export default function HomePage() {
     setFuel("")
   }
 
-  const latestUpdated = records.reduce<{ time: number; value: string } | null>((latest, record) => {
-    if (!record.lastUpdated) return latest
-    const time = new Date(record.lastUpdated).getTime()
-    if (!latest || time > latest.time) {
-      return { time, value: record.lastUpdated }
-    }
-    return latest
-  }, null)
-
   const handleInstall = async () => {
     if (!installPrompt) return
     await installPrompt.prompt()
@@ -355,9 +347,9 @@ export default function HomePage() {
           </Card>
         )}
 
-        {latestUpdated && (
+        {appBuildAt && (
           <p className="mt-6 text-xs text-muted-foreground text-right">
-            最終更新: {new Date(latestUpdated.value).toLocaleString('ja-JP')}
+            アプリ更新日: {new Date(appBuildAt).toLocaleString('ja-JP')}
           </p>
         )}
       </div>
