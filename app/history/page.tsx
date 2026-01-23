@@ -159,6 +159,7 @@ export default function HistoryPage() {
     const recalculatedRecords = recalculateFuelEfficiency(sortedRecords)
 
     saveRecords(recalculatedRecords)
+    exportToCSV(recalculatedRecords, { allowEmpty: true })
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -213,6 +214,7 @@ export default function HistoryPage() {
       const recalculatedRecords = recalculateFuelEfficiency(updatedRecords)
 
       saveRecords(recalculatedRecords)
+      exportToCSV(recalculatedRecords, { allowEmpty: true })
     }
 
     setDate("")
@@ -408,8 +410,12 @@ export default function HistoryPage() {
     e.target.value = ''
   }
 
-  const exportToCSV = () => {
-    if (records.length === 0) {
+  const exportToCSV = (
+    exportRecords: FuelRecord[] = records,
+    options?: { allowEmpty?: boolean }
+  ) => {
+    const allowEmpty = options?.allowEmpty ?? false
+    if (exportRecords.length === 0 && !allowEmpty) {
       alert('エクスポートするデータがありません。')
       return
     }
@@ -417,7 +423,7 @@ export default function HistoryPage() {
     const headers = ['日付', '走行距離(km)', '給油量(L)', '燃費(km/L)']
     const csvContent = [
       headers.join(','),
-      ...records.map(record => [
+      ...exportRecords.map(record => [
         record.date,
         record.mileage || '',
         record.fuel,

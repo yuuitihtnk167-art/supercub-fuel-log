@@ -164,6 +164,35 @@ export default function HomePage() {
     return result
   }
 
+  const exportToCSV = (
+    exportRecords: FuelRecord[] = records,
+    options?: { allowEmpty?: boolean }
+  ) => {
+    const allowEmpty = options?.allowEmpty ?? false
+    if (exportRecords.length === 0 && !allowEmpty) {
+      alert("エクスポートするデータがありません。")
+      return
+    }
+
+    const headers = ["日付", "走行距離(km)", "給油量(L)", "燃費(km/L)"]
+    const csvContent = [
+      headers.join(","),
+      ...exportRecords.map((record) =>
+        [record.date, record.mileage || "", record.fuel, record.fuelEfficiency || ""].join(","),
+      ),
+    ].join("\n")
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+    const link = document.createElement("a")
+    const url = URL.createObjectURL(blob)
+    link.setAttribute("href", url)
+    link.setAttribute("download", `fuel_records_${new Date().toISOString().split("T")[0]}.csv`)
+    link.style.visibility = "hidden"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -216,6 +245,7 @@ export default function HomePage() {
       const recalculatedRecords = recalculateFuelEfficiency(updatedRecords)
 
       saveRecords(recalculatedRecords)
+      exportToCSV(recalculatedRecords, { allowEmpty: true })
     }
 
     setDate("")
