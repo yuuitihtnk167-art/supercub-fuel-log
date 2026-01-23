@@ -229,6 +229,11 @@ export default function HistoryPage() {
     setFuel("")
   }
 
+  const handleDeleteAll = () => {
+    if (!confirm("すべての記録を削除しますか？")) return
+    saveRecords([])
+  }
+
   const getFormulaInfo = (record: FuelRecord, index: number) => {
     if (!record.fuelEfficiency || record.mileage === null || !record.fuel || record.fuel <= 0) return null
 
@@ -510,6 +515,9 @@ export default function HistoryPage() {
               <Button onClick={exportToCSV} variant="outline" className="flex items-center gap-2">
                 <Upload className="h-4 w-4" />
                 CSVエクスポート
+              </Button>
+              <Button onClick={handleDeleteAll} variant="destructive" className="flex items-center gap-2">
+                すべて削除
               </Button>
             </div>
           </div>
