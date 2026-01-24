@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { ArrowLeft, Fuel, Calculator, AlertCircle, Upload, Calendar } from "lucide-react"
 import Link from "next/link"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 interface FuelRecord {
   id: string
@@ -467,11 +468,16 @@ export default function HistoryPage() {
         </Link>
 
         <header className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2 flex items-center gap-3">
-            <Fuel className="h-10 w-10 text-primary" />
-            履歴・インポート
-          </h1>
-          <p className="text-muted-foreground">給油履歴の確認とCSVインポート・エクスポート</p>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h1 className="text-4xl font-bold text-foreground mb-2 flex items-center gap-3">
+                <Fuel className="h-10 w-10 text-primary" />
+                履歴・インポート
+              </h1>
+              <p className="text-muted-foreground">給油履歴の確認とCSVインポート・エクスポート</p>
+            </div>
+            <ThemeToggle />
+          </div>
         </header>
 
         <div className="flex gap-3 mb-8 flex-wrap">

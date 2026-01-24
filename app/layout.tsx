@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister"
+import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   description: "スーパーカブの燃費を記録・管理するアプリケーション",
   generator: "v0.app",
   manifest: "/manifest.json",
-  themeColor: "#3b82f6",
+  themeColor: "#0b0b0b",
   icons: {
     icon: [
       {
@@ -49,11 +50,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ja">
+    <html lang="ja" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
-        {children}
-        <ServiceWorkerRegister />
-        <Analytics />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+          <ServiceWorkerRegister />
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card"
 import { ArrowLeft, Calculator, AlertCircle, Fuel, Calendar } from "lucide-react"
 import Link from "next/link"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 interface FuelRecord {
   id: string
@@ -114,8 +115,13 @@ export default function MonthlyPage() {
         </Link>
 
         <header className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">月次燃費レポート</h1>
-          <p className="text-muted-foreground">選択した月の燃費を確認できます。</p>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h1 className="text-4xl font-bold text-foreground mb-2">月次燃費レポート</h1>
+              <p className="text-muted-foreground">選択した月の燃費を確認できます。</p>
+            </div>
+            <ThemeToggle />
+          </div>
         </header>
 
         <div className="flex gap-3 mb-8 flex-wrap">
