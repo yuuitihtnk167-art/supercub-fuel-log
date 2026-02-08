@@ -458,48 +458,54 @@ export default function HistoryPage() {
   }, null)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-accent/10">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <Link href="/">
-          <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            戻る
-          </Button>
-        </Link>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 text-foreground dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-900">
+      <div className="container mx-auto max-w-3xl px-4 py-8 sm:py-10">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Link href="/">
+            <Button variant="outline" className="h-11 w-full justify-center gap-2 sm:w-auto">
+              <ArrowLeft className="h-4 w-4" />
+              戻る
+            </Button>
+          </Link>
+          <ThemeToggle />
+        </div>
 
         <header className="mb-8">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <h1 className="text-4xl font-bold text-foreground mb-2 flex items-center gap-3">
-                <Fuel className="h-10 w-10 text-primary" />
-                履歴・インポート
-              </h1>
-              <p className="text-muted-foreground">給油履歴の確認とCSVインポート・エクスポート</p>
-            </div>
-            <ThemeToggle />
+          <div className="space-y-2 text-center sm:text-left">
+            <h1 className="flex items-center justify-center gap-3 text-3xl font-bold leading-tight text-foreground sm:justify-start sm:text-4xl">
+              <Fuel className="h-10 w-10 text-primary" />
+              履歴・インポート
+            </h1>
+            <p className="text-muted-foreground">給油履歴の確認とCSVインポート・エクスポート</p>
           </div>
         </header>
 
-        <div className="flex gap-3 mb-8 flex-wrap">
+        <div className="mb-8 grid gap-3 sm:grid-cols-3">
           <Link href="/">
-            <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+            <Button
+              variant="outline"
+              className="h-12 w-full justify-center gap-2 border-border text-base text-foreground hover:bg-secondary dark:bg-white/5 dark:text-white dark:border-white/15 dark:hover:bg-white/10"
+            >
               <Fuel className="h-4 w-4" />
               記録
             </Button>
           </Link>
-          <Button className="flex items-center gap-2 bg-primary">
+          <Button className="h-12 w-full justify-center gap-2 bg-primary text-base text-primary-foreground hover:bg-primary/90 dark:text-black">
             <Fuel className="h-4 w-4" />
             履歴・インポート
           </Button>
           <Link href="/monthly">
-            <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+            <Button
+              variant="outline"
+              className="h-12 w-full justify-center gap-2 border-border text-base text-foreground hover:bg-secondary dark:bg-white/5 dark:text-white dark:border-white/15 dark:hover:bg-white/10"
+            >
               <Calendar className="h-4 w-4" />
               月次レポート
             </Button>
           </Link>
         </div>
 
-        <Card className="p-6 mb-8 bg-card border-border">
+        <Card className="mb-8 bg-card p-5 sm:p-6 border-border dark:bg-white/5 dark:border-white/10">
           <h2 className="text-2xl font-semibold mb-4 text-foreground">CSVインポート・エクスポート</h2>
           <div className="space-y-4">
             <div>
@@ -511,25 +517,33 @@ export default function HistoryPage() {
                 type="file"
                 accept=".csv"
                 onChange={handleFileUpload}
-                className="mt-1"
+                className="mt-1 h-11"
               />
               <p className="text-sm text-muted-foreground mt-2">
                 CSVファイルには「日付」「給油量」の列が必要です。「走行距離」は任意です。
               </p>
             </div>
-            <div className="flex gap-3">
-              <Button onClick={exportToCSV} variant="outline" className="flex items-center gap-2">
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Button
+                onClick={exportToCSV}
+                variant="outline"
+                className="h-11 w-full justify-center gap-2 text-base sm:w-auto"
+              >
                 <Upload className="h-4 w-4" />
                 CSVエクスポート
               </Button>
-              <Button onClick={handleDeleteAll} variant="destructive" className="flex items-center gap-2">
+              <Button
+                onClick={handleDeleteAll}
+                variant="destructive"
+                className="h-11 w-full justify-center gap-2 text-base sm:w-auto"
+              >
                 すべて削除
               </Button>
             </div>
           </div>
         </Card>
 
-        <Card className="p-6 bg-card border-border">
+        <Card className="bg-card p-5 sm:p-6 border-border dark:bg-white/5 dark:border-white/10">
           <h2 className="text-2xl font-semibold mb-4 text-foreground">給油履歴</h2>
           <div className="space-y-3">
             {records.length === 0 ? (
@@ -548,7 +562,7 @@ export default function HistoryPage() {
 
                   return (
                   <div key={record.id}>
-                    <div className="flex justify-between items-center p-4 bg-secondary/30 rounded-lg border border-border hover:bg-secondary/50 transition-colors">
+                    <div className="flex flex-col gap-3 p-4 bg-secondary/30 rounded-lg border border-border hover:bg-secondary/50 transition-colors sm:flex-row sm:items-center sm:justify-between">
                       <div className="flex-1">
                         <div className="font-medium text-foreground">{record.date}</div>
                         <div className="text-sm text-muted-foreground">
@@ -567,20 +581,31 @@ export default function HistoryPage() {
                           </div>
                         )}
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
                         {formulaInfo && (
                           <Button
                             size="sm"
                             variant={isFormulaVisible ? "default" : "outline"}
                             onClick={() => setShowFormulaId(isFormulaVisible ? null : record.id)}
+                            className="h-10 w-10"
                           >
                             <Calculator className="h-4 w-4" />
                           </Button>
                         )}
-                        <Button size="sm" variant="outline" onClick={() => handleEdit(record)}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleEdit(record)}
+                          className="h-10 px-3"
+                        >
                           編集
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => handleDelete(record.id)}>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleDelete(record.id)}
+                          className="h-10 px-3"
+                        >
                           削除
                         </Button>
                       </div>

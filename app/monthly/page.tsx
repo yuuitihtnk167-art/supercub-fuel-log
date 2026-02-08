@@ -105,50 +105,59 @@ export default function MonthlyPage() {
   }, [selectedMonth, records])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-accent/10">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <Link href="/">
-          <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            戻る
-          </Button>
-        </Link>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 text-foreground dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-900">
+      <div className="container mx-auto max-w-3xl px-4 py-8 sm:py-10">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Link href="/">
+            <Button variant="outline" className="h-11 w-full justify-center gap-2 sm:w-auto">
+              <ArrowLeft className="h-4 w-4" />
+              戻る
+            </Button>
+          </Link>
+          <ThemeToggle />
+        </div>
 
         <header className="mb-8">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <h1 className="text-4xl font-bold text-foreground mb-2">月次燃費レポート</h1>
-              <p className="text-muted-foreground">選択した月の燃費を確認できます。</p>
-            </div>
-            <ThemeToggle />
+          <div className="space-y-2 text-center sm:text-left">
+            <h1 className="flex items-center justify-center gap-3 text-3xl font-bold leading-tight text-foreground sm:justify-start sm:text-4xl">
+              <Calendar className="h-10 w-10 text-primary" />
+              月次燃費レポート
+            </h1>
+            <p className="text-muted-foreground">選択した月の燃費を確認できます。</p>
           </div>
         </header>
 
-        <div className="flex gap-3 mb-8 flex-wrap">
+        <div className="mb-8 grid gap-3 sm:grid-cols-3">
           <Link href="/">
-            <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+            <Button
+              variant="outline"
+              className="h-12 w-full justify-center gap-2 border-border text-base text-foreground hover:bg-secondary dark:bg-white/5 dark:text-white dark:border-white/15 dark:hover:bg-white/10"
+            >
               <Fuel className="h-4 w-4" />
               記録
             </Button>
           </Link>
           <Link href="/history">
-            <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+            <Button
+              variant="outline"
+              className="h-12 w-full justify-center gap-2 border-border text-base text-foreground hover:bg-secondary dark:bg-white/5 dark:text-white dark:border-white/15 dark:hover:bg-white/10"
+            >
               <Fuel className="h-4 w-4" />
               履歴・インポート
             </Button>
           </Link>
-          <Button className="flex items-center gap-2 bg-primary">
+          <Button className="h-12 w-full justify-center gap-2 bg-primary text-base text-primary-foreground hover:bg-primary/90 dark:text-black">
             <Calendar className="h-4 w-4" />
             月次レポート
           </Button>
         </div>
 
-        <Card className="p-6 mb-8 bg-card border-border">
+        <Card className="mb-8 bg-card p-5 sm:p-6 border-border dark:bg-white/5 dark:border-white/10">
           <div className="space-y-4">
             <div>
               <label className="text-sm font-medium text-foreground mb-2 block">月を選択</label>
               <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full h-11">
                   <SelectValue placeholder="月を選択してください" />
                 </SelectTrigger>
                 <SelectContent>
@@ -162,7 +171,7 @@ export default function MonthlyPage() {
             </div>
 
             {averageFuelEfficiency !== null ? (
-              <div className="mt-6 p-6 bg-primary/10 rounded-lg border-2 border-primary">
+              <div className="mt-6 p-5 sm:p-6 bg-primary/10 rounded-lg border-2 border-primary">
                 <div className="text-center">
                   <p className="text-sm text-muted-foreground mb-2">平均燃費</p>
                   <p className="text-5xl font-bold text-primary">{averageFuelEfficiency.toFixed(2)}</p>
@@ -178,7 +187,7 @@ export default function MonthlyPage() {
                       size="sm"
                       variant={showMonthlyFormula ? "default" : "outline"}
                       onClick={() => setShowMonthlyFormula(!showMonthlyFormula)}
-                      className="flex items-center gap-2"
+                      className="h-10 px-4 text-sm sm:text-base"
                     >
                       <Calculator className="h-4 w-4" />
                       {showMonthlyFormula ? "計算式を隠す" : "計算式を表示"}
@@ -186,7 +195,7 @@ export default function MonthlyPage() {
                   </div>
 
                   {showMonthlyFormula && (
-                    <div className="mt-4 p-4 bg-background/80 rounded-lg text-left text-sm">
+                    <div className="mt-4 p-4 sm:p-5 bg-background/80 rounded-lg text-left text-sm">
                       <div className="font-semibold text-foreground mb-2 flex items-center gap-2">
                         <Calculator className="h-4 w-4" />
                         月次燃費の計算式
@@ -281,7 +290,7 @@ export default function MonthlyPage() {
                 </div>
               </div>
             ) : (
-              <div className="mt-6 p-6 bg-muted/50 rounded-lg text-center">
+              <div className="mt-6 p-5 sm:p-6 bg-muted/50 rounded-lg text-center">
                 <p className="text-muted-foreground">
                   {selectedMonth
                     ? "選択した月は走行距離の記録が不足しています。少なくとも2件の走行距離を登録してください。"
@@ -293,13 +302,13 @@ export default function MonthlyPage() {
         </Card>
 
         {monthlyRecords.length > 0 && (
-          <Card className="p-6 bg-card border-border">
+          <Card className="bg-card p-5 sm:p-6 border-border dark:bg-white/5 dark:border-white/10">
             <h2 className="text-2xl font-semibold mb-4 text-foreground">{selectedMonth} の記録</h2>
             <div className="space-y-3">
               {[...monthlyRecords].reverse().map((record) => (
                 <div
                   key={record.id}
-                  className="flex justify-between items-center p-4 bg-secondary/30 rounded-lg border border-border"
+                  className="flex flex-col gap-2 p-4 bg-secondary/30 rounded-lg border border-border sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="flex-1">
                     <div className="font-medium text-foreground">{record.date}</div>
